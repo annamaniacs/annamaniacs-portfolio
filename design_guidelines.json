@@ -1,0 +1,208 @@
+{
+  "project_name": "Anna Cheng - Senior AI Product Designer Portfolio & Executive Platform",
+  "target_audience": "Design Leadership, VP/Head of Design Recruiters, Executive Hiring Managers, Enterprise AI Founders",
+  "archetype": "ARCHETYPE 4: SWISS & HIGH-CONTRAST meets ARCHETYPE 5: LUXURY EDITORIAL (Executive Authority, Precision, Architectural Clarity, AI-Era Sophistication)",
+  "design_freedom": "HIGH - Executive Editorial hybrid with high density interactive tools, scannable case studies, and live AI assistant",
+  "theme_strategy": {
+    "default_mode": "dark",
+    "toggle_available": true,
+    "dark_mode_rationale": "Deep executive charcoal tone (#0D0E11) conveys authority, high-tech AI sophistication, and reduces eye strain while highlighting rich case study imagery and interactive data visualizers.",
+    "light_mode_rationale": "Warm museum paper tone (#F9F8F6) gives an editorial print magazine aesthetic suitable for formal executive presentation."
+  },
+  "typography": {
+    "font_family_pairing": {
+      "display_heading": "Cabinet Grotesk / Cormorant Garamond / Playfair Display (Google Font / CDN fallback)",
+      "sans_body": "Plus Jakarta Sans / Inter",
+      "mono_accent": "JetBrains Mono / IBM Plex Mono"
+    },
+    "font_urls": [
+      "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap"
+    ],
+    "hierarchy": {
+      "hero_h1": "text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.08] font-serif",
+      "section_h2": "text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight leading-tight",
+      "subsection_h3": "text-xl sm:text-2xl font-semibold tracking-normal",
+      "card_h4": "text-lg sm:text-xl font-medium tracking-normal",
+      "body_text": "text-base sm:text-lg leading-relaxed text-muted-foreground",
+      "eyebrow_label": "text-xs uppercase tracking-[0.25em] font-mono font-semibold text-amber-500 dark:text-amber-400",
+      "metric_number": "text-4xl sm:text-5xl font-mono font-bold tracking-tighter"
+    }
+  },
+  "colors": {
+    "palette_name": "Swiss Onyx & Kinetic Amber",
+    "dark_theme": {
+      "background": "#0D0E11",
+      "surface_card": "#15171C",
+      "surface_elevated": "#1E2128",
+      "border": "#2A2D37",
+      "border_hover": "#3F4452",
+      "foreground_primary": "#F3F4F6",
+      "foreground_muted": "#9CA3AF",
+      "primary_accent": "#F59E0B",
+      "primary_accent_hover": "#D97706",
+      "secondary_accent": "#6366F1",
+      "ai_glow": "#38BDF8",
+      "success": "#10B981"
+    },
+    "light_theme": {
+      "background": "#F9F8F6",
+      "surface_card": "#FFFFFF",
+      "surface_elevated": "#F3F2EE",
+      "border": "#E5E3DD",
+      "border_hover": "#D1CEC5",
+      "foreground_primary": "#111827",
+      "foreground_muted": "#4B5563",
+      "primary_accent": "#D97706",
+      "primary_accent_hover": "#B45309",
+      "secondary_accent": "#4F46E5",
+      "ai_glow": "#0284C7",
+      "success": "#059669"
+    },
+    "forbidden_colors": [
+      "#7351B7",
+      "#1B93A4",
+      "pure transparent headers without blur backdrop"
+    ]
+  },
+  "spacing_and_layout": {
+    "container_max_width": "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8",
+    "section_padding": "py-16 sm:py-24 lg:py-32",
+    "card_internal_padding": "p-6 sm:p-8",
+    "bento_grid_modes": {
+      "hero_overview": "grid grid-cols-1 md:grid-cols-12 gap-6 lg:gap-8",
+      "case_study_grid": "grid grid-cols-1 lg:grid-cols-12 gap-8 items-start",
+      "metrics_strip": "grid grid-cols-2 md:grid-cols-5 gap-4 lg:gap-6"
+    }
+  },
+  "navigation_and_header": {
+    "style": "Sticky top-0 z-50 backdrop-blur-xl bg-background/80 border-b border-border/60 transition-colors duration-200",
+    "brand_logo": "ANNA CHENG // 30 YR UX & AI",
+    "desktop_links": [
+      "Ways I Work",
+      "Featured Work",
+      "About & 15 Yrs",
+      "Resume",
+      "Ask Anna's AI",
+      "JD Matcher"
+    ],
+    "header_ctas": [
+      {
+        "label": "Download Resume (PDF)",
+        "variant": "outline",
+        "action": "trigger_pdf_print"
+      },
+      {
+        "label": "Private Owner Portal",
+        "variant": "secondary",
+        "action": "open_login"
+      }
+    ]
+  },
+  "component_architecture": {
+    "public_home": {
+      "hero_headline": "I make complex, high-stakes products clear, including the AI inside them.",
+      "subtext": "30 years of UX/UI evolution — from early web software to enterprise AI agents. Based in Denver, CO.",
+      "ways_i_work_tracks": [
+        {
+          "track": "Hands-on Principal IC",
+          "focus": "Architecting multi-modal enterprise UIs, AI failure state designs, & high-stakes workflows."
+        },
+        {
+          "track": "AI Product Design",
+          "focus": "Human-in-the-loop agentic systems, confidence scoring UIs, and explainable AI interactions."
+        },
+        {
+          "track": "Design Leadership",
+          "focus": "Scaling design systems across cross-functional teams, mentoring 50+ designers, & strategic alignment."
+        }
+      ],
+      "client_logo_wordmarks": [
+        "Bank of America",
+        "PNC",
+        "Meta",
+        "GE Aerospace",
+        "Dell",
+        "Ulta Beauty",
+        "Highland Homes",
+        "Phoenix Technologies",
+        "Neudesic"
+      ],
+      "metrics_strip": [
+        {"metric": "21", "label": "Executive Interviews Conducted"},
+        {"metric": "136", "label": "Critical UX & AI Failure Fixes"},
+        {"metric": "130+", "label": "Production Screens Architected"},
+        {"metric": "35%", "label": "Engagement Lift Achieved"},
+        {"metric": "50+", "label": "Designers & Engineers Mentored"}
+      ]
+    },
+    "case_study_format": {
+      "structure": [
+        "Executive Summary",
+        "Problem Statement",
+        "My Specific Role",
+        "Key UX & AI Decisions",
+        "Quantified Outcomes",
+        "What AI Changed / Lessons Learned"
+      ],
+      "placeholder_indicator": "Metrics explicitly marked as [To Confirm] when appropriate for recruiter transparency."
+    },
+    "interactive_features": {
+      "ask_annas_ai": "Floating or dedicated interactive AI streaming chat panel answering questions on Anna's experience, methodology, and philosophy.",
+      "job_description_matcher": "Public tool where recruiters paste a Job Description and get an instant AI match score, relevant skills, and recommended case studies.",
+      "private_owner_portal": "Secure area with Tailoring Tool (ATS keywords, bullet re-ordering), Inbox (chat queries, JD submissions), and 7-chapter Strategy Playbook."
+    }
+  },
+  "visual_enhancers": {
+    "tracing_beam": "Glowing Amber/Indigo accent border on active case study cards and JD matcher panel",
+    "glassmorphism": "backdrop-blur-xl bg-slate-900/70 border border-slate-700/50 for floating AI agent widget",
+    "micro_textures": "Subtle noise overlay (svg grain filter) to eliminate flat digital glare and give an editorial print texture",
+    "code_accents": "Monospace tags with brackets e.g. [ROLE :: PRINCIPAL IC] and [STATUS :: PRODUCTION SHIPPED]"
+  },
+  "motion_and_interactions": {
+    "smooth_scroll": "Lenis smooth scroll integration",
+    "framer_motion_stagger": "Fade-in and subtle slide-up stagger for grid cards",
+    "hover_states": "Hover lift -translate-y-1 with shadow glow transition",
+    "prefers_reduced_motion": "Respect system settings with fallback static layout"
+  },
+  "image_urls": {
+    "anna_portrait": "https://images.unsplash.com/photo-1612476929092-26a78fd1ea89?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMjd8MHwxfHNlYXJjaHwyfHxzZW5pb3IlMjBmZW1hbGUlMjBwcm9kdWN0JTIwZGVzaWduZXIlMjBwb3J0cmFpdCUyMHN0dWRpbyUyMGV4ZWN1dGl2ZXxlbnwwfHx8fDE3OTE5Nzg1MjB8MA&ixlib=rb-4.1.0&q=85",
+    "case_study_previews": [
+      {
+        "title": "Bank of America Enterprise AI Copilot",
+        "url": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NzV8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBBSSUyMHByb2R1Y3QlMjBkZXNpZ24lMjBkYXNoYm9hcmQlMjBVSSUyMGludGVyZmFjZSUyMHByZXZpZXd8ZW58MHx8fHwxNzkxOTc4NTIwfDA&ixlib=rb-4.1.0&q=85"
+      },
+      {
+        "title": "Meta Knowledge Agent Interface",
+        "url": "https://images.unsplash.com/photo-1763718528755-4bca23f82ac3?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NzV8MHwxfHNlYXJjaHwzfHxtb2Rlcm4lMjBBSSUyMHByb2R1Y3QlMjBkZXNpZ24lMjBkYXNoYm9hcmQlMjBVSSUyMGludGVyZmFjZSUyMHByZXZpZXd8ZW58MHx8fHwxNzkxOTc4NTIwfDA&ixlib=rb-4.1.0&q=85"
+      },
+      {
+        "title": "GE Aerospace Operational Intelligence",
+        "url": "https://images.unsplash.com/photo-1686061592689-312bbfb5c055?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NzV8MHwxfHNlYXJjaHwyfHxtb2Rlcm4lMjBBSSUyMHByb2R1Y3QlMjBkZXNpZ24lMjBkYXNoYm9hcmQlMjBVSSUyMGludGVyZmFjZSUyMHByZXZpZXd8ZW58MHx8fHwxNzkxOTc4NTIwfDA&ixlib=rb-4.1.0&q=85"
+      },
+      {
+        "title": "Dell Enterprise Systems Redesign",
+        "url": "https://images.unsplash.com/photo-1560461396-ec0ef7bb29dd?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NzV8MHwxfHNlYXJjaHw0fHxtb2Rlcm4lMjBBSSUyMHByb2R1Y3QlMjBkZXNpZ24lMjBkYXNoYm9hcmQlMjBVSSUyMGludGVyZmFjZSUyMHByZXZpZXd8ZW58MHx8fHwxNzkxOTc4NTIwfDA&ixlib=rb-4.1.0&q=85"
+      }
+    ]
+  },
+  "testing_and_accessibility": {
+    "data_testid_requirement": "EVERY interactive element (buttons, links, inputs, tabs, modal triggers, chat items, private owner buttons) MUST include a clear kebab-case data-testid attribute.",
+    "wcag_compliance": "Minimum 4.5:1 contrast for body text, 3:1 for large display headers and buttons. Visible focus rings on keyboard navigation."
+  },
+  "instructions_to_main_agent": [
+    "Strictly follow the color palette and typography rules specified above.",
+    "Construct the 3 'Ways I Work' tracks cleanly on the homepage with deep dive modals or direct links to filtered case studies.",
+    "Implement the live streaming AI assistant ('Ask Anna's AI') with pre-populated prompt suggestions (e.g., 'What is Anna's experience with AI failure modes?', 'How does Anna approach design leadership?').",
+    "Build the public Job Description Matcher tool with interactive file/text input, generating detailed keyword alignment, match score badge, and suggested case studies.",
+    "Build the private owner area with passcode/login, resume tailoring tool, inbox of incoming recruiter interactions, and 7-chapter strategy playbook with side TOC navigation.",
+    "Ensure all buttons, inputs, cards, and navigation links have unique data-testid attributes."
+  ],
+  "UNIVERSAL GUIDELINES FOR MAIN AGENT": [
+    "Avoid generic AI slop centered layouts; enforce asymmetric editorial bento grids.",
+    "Never use dark colors as high-contrast multi-stop gradients; use rich solid surfaces with 1px precise borders (#2A2D37).",
+    "Layered z-index control for sticky navigation, floating chat drawer, and modal overlays.",
+    "Do not use transparent background without backdrop blur filter on headers or overlays.",
+    "Ensure micro-interactions on hover, focus, and state transitions without using universal transition:all.",
+    "Include data-testid on all interactive and data display components."
+  ]
+}
