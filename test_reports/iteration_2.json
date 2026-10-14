@@ -1,0 +1,28 @@
+{
+  "summary": "Tested the 4 new features: (1) new AI-focused case study, (2) contact email alert integration, (3) application tracker, (4) private mock interview tool. Backend pytest: 39/39 passed (22 prior + 17 new covering ai-assisted-design in /api/content, Applications CRUD + stages + auth guards + 422 for invalid stage + 404 for bad id, Interview question/score SSE streams + auth guards + 422 for short answer + delete + list). Frontend Playwright: /work/ai-assisted-design renders Problem / My role / Key decisions / What AI changed / Tools and two 'TO CONFIRM' pills on outcome tiles; home shows exactly 6 case rows with case-row-ai-assisted-design at position 4; /work?track=ai-product-design includes the new case. Owner Applications page (/owner/applications) opens via owner-nav-applications; app-add-btn dialog creates a card (TEST_FE_Co) that lands in the Applied column, stage select moves it to Interviewing, edit (app-edit-btn-<id>) and delete (app-delete-btn-<id>) work; app-stat-total/applied/in-process/screen-rate update; past-dated follow-up shows 'Follow up due · <date>' on the card and an 'N follow-up due today or overdue.' banner (app-due-banner) is rendered when due > 0. Owner Mock interview (/owner/interview via owner-nav-interview): interview-ask-btn streams a question into interview-question (318-char question received); typed a >150-char answer into interview-answer-input; interview-score-btn streams feedback starting with 'Score: 3/10' into interview-feedback; interview-history-item-<id> appeared with 3.0 score, interview-avg-score updated to 3.0, delete worked. Contact alert: /api/contact still returns 200 quickly and persists; because the provider returns 402 insufficient_credits (expected per request), contacts land with alerted=false and the inbox shows 'Email alert not sent' via inbox-alert-status-<id> — this is expected, not a bug.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "/owner/applications Add dialog", "issues": ["Stage picker is a native <select> rather than a shadcn Select — functional but inconsistent with the rest of the owner area styling. Minor."]}
+    ]
+  },
+  "test_report_links": ["/app/backend/tests/backend_test.py", "/app/test_reports/pytest/pytest_results.xml"],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "backend/server.py: /api/admin/interview/question has an async `done` callback that returns None instead of persisting the question; this means question-only calls aren't logged. Current flow is fine because scoring persists the full exchange, but if you ever want question-only history you'll need to save it.",
+    "backend/server.py:ApplicationIn.stage default is 'Saved' and _app_payload raises 422 on bad stage, but PUT does not require all fields idempotently (ApplicationIn uses many default='' values). An accidental PUT with only {company:'X'} will blank role/url/track/notes. Consider a partial-update model (ApplicationPatch) if you want PATCH semantics.",
+    "backend/server.py: /api/admin/applications POST response reconstructs the doc via `{**doc.to_mongo(), '_id': res.inserted_id}` — works, but inconsistent with other routes that fetch after insert; low priority.",
+    "frontend/src/pages/owner/Applications.jsx: uses native HTML <select> for stage; rest of app uses shadcn Select — small design inconsistency.",
+    "backend/email_alerts.py (not viewed): the 402 insufficient_credits is swallowed silently per expectation. Consider surfacing a one-time admin banner on /owner/inbox when alerts are failing, so Anna isn't blindsided when billing lapses. The current 'Email alert not sent' chip conveys per-contact state but not system state."
+  ],
+  "updated_files": ["/app/backend/tests/backend_test.py"],
+  "success_rate": {"backend": "100% (39/39)", "frontend": "100%"},
+  "test_credentials": "anna@annamaniacs.com / Portfolio!2026 (from /app/memory/test_credentials.md)",
+  "seed_data_creation": "Backend tests created and deleted a TEST_Co application and 1 TEST interview record (cleaned up). Frontend tests created and deleted 1 TEST_FE_Co application. All test data cleaned up. 2 LLM calls for interview Q+S via backend + 2 LLM calls via frontend UI (4 total), plus the prior-iteration tailor/chat/match stream tests.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "All 39 backend pytest tests pass against public URL. All 4 new features verified end-to-end on the UI. Email alerts are expected to fail with alerted=false while the LLM provider account has 0 credits — don't flag it as a bug. Interview + score each cost a real LLM call (10-40s each), so if re-running keep the count low. The Tailor 'Add to application tracker' button (tailor-add-to-tracker-btn) was NOT exercised in UI this run because the Tailor stream itself is an extra LLM call; backend application-creation path it uses is already covered by test_applications_crud. For a future run, visit /owner/tailor, run one tailoring, click tailor-add-to-tracker-btn, and verify an application appears on /owner/applications.",
+  "rca of the issue": "N/A — no issues found."
+}

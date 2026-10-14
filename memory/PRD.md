@@ -21,9 +21,15 @@
 - Owner area: login (seeded anna@annamaniacs.com), tailoring tool with copyable sections + history, inbox (messages/chats/matches), strategy guide
 - Tested: iteration_1 100% backend + frontend
 
+## Iteration 2 (2026-06)
+- New featured AI case study: /work/ai-assisted-design (Highland Homes AI-assisted workflow, TO CONFIRM metrics)
+- Email alerts to OWNER_EMAIL on each contact submission (Emergent managed Resend, email_alerts.py); Inbox shows sent/not-sent per message
+- Application tracker (/owner/applications): stage board, follow-up dates, stats, "Add to tracker" from Tailor
+- Mock interview (/owner/interview): AI questions by track/type (+ optional JD), scored feedback with stronger answer, history + average
+- Tested: iteration_2 100%
+
 ## Backlog
 - P1: Owner content editing (case studies, metrics) without code
-- P1: Email alerts for new contact messages (Resend)
 - P2: Analytics (page views, which cases recruiters open)
 - P2: Dedicated AI case study page once Anna writes it; real headshot on About
 - P2: Light theme toggle; OG share image
