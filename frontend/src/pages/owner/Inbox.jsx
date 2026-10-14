@@ -17,6 +17,7 @@ const Contacts = ({ items, onRead }) =>
             <p className="font-mono text-[11px] text-muted-foreground">{when(c.created_at)}</p>
           </div>
           {c.company && <p className="mt-1 text-sm text-muted-foreground">{c.company}</p>}
+          <p className={`mt-1 font-mono text-[10px] uppercase tracking-widest ${c.alerted ? "text-emerald-400" : "text-muted-foreground"}`} data-testid={`inbox-alert-status-${c.id}`}>{c.alerted ? "Email alert sent" : "Email alert not sent"}</p>
           <p className="mt-3 whitespace-pre-wrap text-sm">{c.message}</p>
           {!c.read && <button onClick={() => onRead(c.id)} className="mt-3 font-mono text-[11px] uppercase tracking-widest text-muted-foreground hover:text-foreground" data-testid={`inbox-mark-read-${c.id}`}>Mark as read</button>}
         </div>

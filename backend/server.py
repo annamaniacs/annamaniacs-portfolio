@@ -25,6 +25,9 @@ from emergentintegrations.llm.chat import LlmChat, UserMessage, TextDelta, Strea
 from content import public_content, knowledge_text, PROFILE
 from strategy import CHAPTERS
 from resume_pdf import build_resume_pdf
+from email_alerts import notify_new_contact
+import asyncio
+import re
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
@@ -76,12 +79,56 @@ class ContactDoc(BaseDocument):
     company: str = ""
     message: str
     read: bool = False
+    alerted: bool = False
+
+
+STAGES = ["Saved", "Applied", "Recruiter screen", "Interviewing", "Offer", "Rejected"]
+
+
+class ApplicationIn(BaseModel):
+    company: str = Field(min_length=1, max_length=120)
+    role: str = Field(default="", max_length=160)
+    url: str = Field(default="", max_length=500)
+    stage: str = "Saved"
+    track: str = Field(default="", max_length=60)
+    contact: str = Field(default="", max_length=200)
+    follow_up: str = Field(default="", max_length=10)
+    notes: str = Field(default="", max_length=4000)
+    tailoring_id: str = ""
+
+
+class ApplicationDoc(BaseDocument, ApplicationIn):
+    updated_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+
+
+class InterviewDoc(BaseDocument):
+    track: str
+    focus: str
+    question: str
+    answer: str
+    feedback: str
+    score: Optional[float] = None
 
 
 class TailorDoc(BaseDocument):
     label: str
     jd: str
     result: str
+
+
+class QuestionIn(BaseModel):
+    track: str = Field(max_length=60)
+    focus: str = Field(max_length=60)
+    jd: str = Field(default="", max_length=15000)
+    avoid: list[str] = Field(default_factory=list, max_length=20)
+
+
+class AnswerIn(BaseModel):
+    track: str = Field(max_length=60)
+    focus: str = Field(max_length=60)
+    jd: str = Field(default="", max_length=15000)
+    question: str = Field(min_length=5, max_length=2000)
+    answer: str = Field(min_length=20, max_length=8000)
 
 
 class LoginIn(BaseModel):
@@ -311,10 +358,17 @@ async def resume_pdf():
                     headers={"Content-Disposition": 'attachment; filename="Anna-Cheng-Principal-Product-Designer.pdf"'})
 
 
+async def _alert_contact(cid, data):
+    if await notify_new_contact(data):
+        await db.contacts.update_one({"_id": cid}, {"$set": {"alerted": True}})
+
+
 @api.post("/contact")
-async def contact(body: ContactIn):
+async def contact(body: ContactIn, request: Request):
+    await rate_limit(request, "contact", 8)
     doc = ContactDoc(**body.model_dump())
-    await db.contacts.insert_one(doc.to_mongo())
+    res = await db.contacts.insert_one(doc.to_mongo())
+    asyncio.create_task(_alert_contact(res.inserted_id, body.model_dump()))
     return {"ok": True}
 
 
@@ -391,6 +445,117 @@ async def mark_read(cid: str, user: dict = Depends(current_user)):
 @api.get("/admin/strategy")
 async def strategy(user: dict = Depends(current_user)):
     return CHAPTERS
+
+
+# ---------- applications ----------
+def _app_payload(body: ApplicationIn) -> dict:
+    if body.stage not in STAGES:
+        raise HTTPException(422, "Invalid stage")
+    return body.model_dump()
+
+
+@api.get("/admin/applications")
+async def list_applications(user: dict = Depends(current_user)):
+    docs = await db.applications.find().sort("updated_at", -1).to_list(500)
+    return {"stages": STAGES, "items": [ApplicationDoc.from_mongo(d).out() for d in docs]}
+
+
+@api.post("/admin/applications")
+async def create_application(body: ApplicationIn, user: dict = Depends(current_user)):
+    doc = ApplicationDoc(**_app_payload(body))
+    res = await db.applications.insert_one(doc.to_mongo())
+    return ApplicationDoc.from_mongo({**doc.to_mongo(), "_id": res.inserted_id}).out()
+
+
+@api.put("/admin/applications/{aid}")
+async def update_application(aid: str, body: ApplicationIn, user: dict = Depends(current_user)):
+    if not ObjectId.is_valid(aid):
+        raise HTTPException(404, "Not found")
+    upd = {**_app_payload(body), "updated_at": datetime.now(timezone.utc).isoformat()}
+    doc = await db.applications.find_one_and_update({"_id": ObjectId(aid)}, {"$set": upd}, return_document=True)
+    if not doc:
+        raise HTTPException(404, "Not found")
+    return ApplicationDoc.from_mongo(doc).out()
+
+
+@api.delete("/admin/applications/{aid}")
+async def delete_application(aid: str, user: dict = Depends(current_user)):
+    if not ObjectId.is_valid(aid):
+        raise HTTPException(404, "Not found")
+    await db.applications.delete_one({"_id": ObjectId(aid)})
+    return {"ok": True}
+
+
+# ---------- mock interview ----------
+FOCUS = {
+    "walkthrough": "a portfolio / case-study walkthrough question",
+    "behavioral": "a behavioral or leadership question (STAR-style)",
+    "ai": "a question about designing for AI or using AI in her design practice",
+    "craft": "a product thinking or design critique question",
+    "seniority": "a probing seniority question (career choices, contract history, scope, staying current)",
+}
+
+QUESTION_SYSTEM = f"""You are a sharp, fair hiring manager interviewing Anna Cheng, a senior product designer. Use the KNOWLEDGE of her background to ask realistic, specific questions (you may reference her real projects).
+Output ONLY one interview question, 1-3 sentences, no preamble, no numbering. {GUARD}
+
+KNOWLEDGE:
+{KNOWLEDGE}"""
+
+SCORE_SYSTEM = f"""You are an expert interview coach for senior product design roles. Score Anna's answer to the interview question candidly.
+Output markdown, exactly:
+First line: **Score: X/10** (integer)
+## What worked
+2-4 bullets.
+## What to improve
+2-4 bullets: specific (structure, evidence, metrics, seniority signal, AI depth, length).
+## Stronger answer
+A first-person rewrite of about 120-170 words that uses ONLY real facts from the KNOWLEDGE and her answer; write [add number] where a metric is missing.
+## Likely follow-up
+One follow-up question the interviewer would ask next.
+{GUARD}
+
+KNOWLEDGE:
+{KNOWLEDGE}"""
+
+
+def _ctx(track: str, focus: str, jd: str) -> str:
+    return f"Target track: {track}\nQuestion type: {FOCUS.get(focus, focus)}\n" + (f"Job description:\n{jd}\n" if jd.strip() else "")
+
+
+@api.post("/admin/interview/question")
+async def interview_question(body: QuestionIn, user: dict = Depends(current_user)):
+    avoid = "\n".join(f"- {q}" for q in body.avoid)
+    prompt = _ctx(body.track, body.focus, body.jd) + (f"Do not repeat these questions:\n{avoid}\n" if avoid else "") + "Ask the next question."
+
+    async def done(_):
+        return None
+    return stream_response(QUESTION_SYSTEM, prompt, done)
+
+
+@api.post("/admin/interview/score")
+async def interview_score(body: AnswerIn, user: dict = Depends(current_user)):
+    prompt = _ctx(body.track, body.focus, body.jd) + f"Question: {body.question}\n\nAnna's answer:\n{body.answer}"
+
+    async def done(text):
+        m = re.search(r"Score:\s*(\d+(?:\.\d+)?)\s*/\s*10", text)
+        doc = InterviewDoc(track=body.track, focus=body.focus, question=body.question, answer=body.answer,
+                           feedback=text, score=float(m.group(1)) if m else None)
+        await db.interviews.insert_one(doc.to_mongo())
+    return stream_response(SCORE_SYSTEM, prompt, done)
+
+
+@api.get("/admin/interviews")
+async def interviews(user: dict = Depends(current_user)):
+    docs = await db.interviews.find().sort("created_at", -1).to_list(300)
+    return [InterviewDoc.from_mongo(d).out() for d in docs]
+
+
+@api.delete("/admin/interviews/{iid}")
+async def delete_interview(iid: str, user: dict = Depends(current_user)):
+    if not ObjectId.is_valid(iid):
+        raise HTTPException(404, "Not found")
+    await db.interviews.delete_one({"_id": ObjectId(iid)})
+    return {"ok": True}
 
 
 app.include_router(api)

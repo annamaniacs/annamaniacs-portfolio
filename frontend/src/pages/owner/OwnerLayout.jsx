@@ -1,10 +1,12 @@
 import { NavLink, Navigate, Outlet, Link } from "react-router-dom";
-import { BookOpen, Wand2, Inbox, LogOut, ExternalLink } from "lucide-react";
+import { BookOpen, Wand2, Inbox, LogOut, ExternalLink, KanbanSquare, Mic } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 
 const items = [
   { to: "/owner", label: "Strategy guide", icon: BookOpen, end: true, id: "strategy" },
   { to: "/owner/tailor", label: "Tailor resume", icon: Wand2, id: "tailor" },
+  { to: "/owner/applications", label: "Applications", icon: KanbanSquare, id: "applications" },
+  { to: "/owner/interview", label: "Mock interview", icon: Mic, id: "interview" },
   { to: "/owner/inbox", label: "Inbox", icon: Inbox, id: "inbox" },
 ];
 

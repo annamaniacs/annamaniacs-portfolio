@@ -72,6 +72,13 @@ export default function Tailor() {
     qc.invalidateQueries({ queryKey: ["tailorings"] });
   };
 
+  const track = async () => {
+    const [company, ...rest] = (label || "Untitled role").split("·").map((s) => s.trim());
+    const fit = out.match(/Best track:\s*([^*\n]+)/);
+    await http.post("/admin/applications", { company: company.slice(0, 120), role: rest.join(" · ").slice(0, 160), stage: "Saved", track: fit ? fit[1].trim().slice(0, 60) : "", notes: "Tailored with the resume tool." });
+    toast.success("Added to Applications");
+  };
+
   const open = (t) => {
     setActiveId(t.id);
     setLabel(t.label);
@@ -94,6 +101,11 @@ export default function Tailor() {
             </button>
           </div>
           {busy && !out && <p className="caret text-sm text-muted-foreground">Reading the role against your experience</p>}
+          {out && !busy && (
+            <button onClick={track} className="inline-flex items-center gap-2 rounded-full border border-border px-5 py-2 text-sm hover:border-amber-500" data-testid="tailor-add-to-tracker-btn">
+              + Add to application tracker
+            </button>
+          )}
           {out && <Sections md={out} streaming={busy} />}
         </div>
         <History items={history} onOpen={open} onDelete={del} activeId={activeId} />

@@ -140,7 +140,7 @@ export default function Home() {
       <Tracks tracks={data.tracks} cases={data.cases} />
       <section className="pb-24" data-testid="featured-section">
         <Container>
-          <SectionHead eyebrow="Selected work" title="Five products where clarity was the hard part." />
+          <SectionHead eyebrow="Selected work" title="Six products where clarity was the hard part." />
           {featured.map((c, i) => <CaseRow key={c.slug} c={c} i={i} />)}
           <Link to="/work" className="mt-6 inline-flex items-center gap-2 border-t border-border pt-8 font-mono text-[11px] uppercase tracking-widest text-muted-foreground hover:text-foreground" data-testid="home-all-work-link">
             More work: GE Aerospace, Dell, State of Vermont, Ulta <ArrowRight className="h-3.5 w-3.5" />

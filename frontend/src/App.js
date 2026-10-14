@@ -18,6 +18,8 @@ import OwnerLayout from "@/pages/owner/OwnerLayout";
 import Strategy from "@/pages/owner/Strategy";
 import Tailor from "@/pages/owner/Tailor";
 import Inbox from "@/pages/owner/Inbox";
+import Applications from "@/pages/owner/Applications";
+import Interview from "@/pages/owner/Interview";
 
 const ScrollTop = () => {
   const { pathname } = useLocation();
@@ -57,6 +59,8 @@ function App() {
               <Route index element={<Strategy />} />
               <Route path="tailor" element={<Tailor />} />
               <Route path="inbox" element={<Inbox />} />
+              <Route path="applications" element={<Applications />} />
+              <Route path="interview" element={<Interview />} />
             </Route>
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
