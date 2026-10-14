@@ -1,0 +1,26 @@
+{
+  "summary": "First full test run of Anna Cheng portfolio (backend + frontend). Backend pytest: 22/22 passed (health, content, resume.pdf, contact validation, auth login/logout/me, admin auth guards on 4 endpoints, strategy 7 chapters, inbox structure, mark-read, match JD validation, SSE chat stream + match stream + authenticated tailor stream, tailor list, delete, bad-id 404). Frontend Playwright: home hero + 3 track cards + 5 case rows + Ask AI launcher/header present; /work filter chips & more-work cards (ge-aerospace, dell, state-of-vermont, ulta-beauty) present; filter adds ?track=ai-product-design; case study (bank-of-america) renders Problem/My role/Key decisions/What AI changed/Tools + 'To confirm' pill; unknown slug /work/nonexistent redirects to /work; resume page download control present and /api/resume.pdf returns valid PDF; contact form submits and shows contact-success; Ask AI panel opens and streams an assistant message; mobile menu works at 390px. Login: wrong password shows 'Invalid email or password'; correct password redirects to /owner; strategy page renders 7 chapters + 7 TOC entries; inbox tabs render and show the test contact message + 3 chat sessions + 1 match; logout redirects to /login and /owner guard redirects to /login after logout.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": ["/app/backend/tests/backend_test.py", "/app/test_reports/pytest/pytest_results.xml"],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "backend/server.py: CORS_ORIGINS default is '*' with allow_credentials=True in backend/.env. Browsers reject credentialed requests when the server echoes '*'. Currently frontend and backend share the same ingress origin so cookies work, but if ever hosted on different origins the login cookie will be silently rejected. Replace '*' with the explicit frontend origin before any cross-origin deployment.",
+    "backend/server.py:154-158: origin check compares urlparse(origin).netloc to request.headers.get('host'); behind the ingress, 'host' may be the internal container host while 'origin' is the public domain, which could cause spurious 403s on authenticated POST/PUT/DELETE in future deployments. Owner POST flows worked today (tailor stream), but worth hardening with an explicit ALLOWED_ORIGINS env.",
+    "backend/server.py uses deprecated @app.on_event('startup'|'shutdown'); FastAPI recommends lifespan context manager. Non-blocking but will warn on upgrade.",
+    "backend/server.py:293 ai_usage uses hour bucket but TTL index expireAfterSeconds=7200 only prunes after 2h; counters are naturally scoped to the hour via key, so TTL is fine but comment is worth adding.",
+    "Frontend: public pages fire GET /api/auth/me on load which returns 401 for anonymous users and shows as console errors. Not a bug, but noisy; consider silencing by catching 401 and treating as 'not logged in'."
+  ],
+  "updated_files": ["/app/backend/tests/backend_test.py"],
+  "success_rate": {"backend": "100%", "frontend": "100%"},
+  "test_credentials": "anna@annamaniacs.com / Portfolio!2026 (from /app/memory/test_credentials.md)",
+  "seed_data_creation": "Created 1 TEST contact (fe_test@example.com) via frontend + 1 TEST_contact (test_contact@example.com) via backend; 1 TEST_tailor doc created and then deleted; a few chat/match docs created by streaming tests.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "All 22 pytest backend tests and all critical frontend flows pass end-to-end against the public ingress URL. SSE streaming (chat, match, tailor) all deliver deltas + done. Login lockout logic exists (5 fails → 15 min) but was not exercised to avoid locking the owner account. Rate limits (chat 40/hr, match 15/hr, per IP) were respected; only 1 chat + 1 match + 1 tailor LLM call made in this run. Public pages trigger a 401 from /api/auth/me as expected for anonymous users. If retesting, reuse /app/backend/tests/backend_test.py (pytest -v).",
+  "rca_of_the_issue": "N/A — no issues found."
+}

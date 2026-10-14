@@ -154,7 +154,8 @@ async def current_user(request: Request) -> dict:
     if request.method in ("POST", "PUT", "PATCH", "DELETE"):
         origin = request.headers.get("origin")
         hosts = {request.headers.get("host"), request.headers.get("x-forwarded-host")}
-        if origin and urlparse(origin).netloc not in hosts:
+        same_site = request.headers.get("sec-fetch-site") == "same-origin"
+        if origin and urlparse(origin).netloc not in hosts and not same_site:
             raise HTTPException(403, "Bad origin")
     return {"id": str(user["_id"]), "email": user["email"], "name": user.get("name", ""), "role": user.get("role", "")}
 
