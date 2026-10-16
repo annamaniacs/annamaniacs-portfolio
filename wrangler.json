@@ -1,6 +1,6 @@
 {
   "name": "my-python-app",
-  "main": "server.py",
+  "main": ".emergent/backend/tests/server.py",
   "compatibility_date": "2026-10-16",
   "compatibility_flags": ["python_workers"],
   "assets": {
