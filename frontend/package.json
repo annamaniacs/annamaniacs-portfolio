@@ -1,7 +1,4 @@
 {
-  "config": {
-  "legacy-peer-deps": true
-},
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
@@ -67,7 +64,7 @@
   },
   "scripts": {
     "start": "craco start",
-    "build": "npm run build --legacy-peer-deps",
+    "build": "craco build",
     "test": "craco test"
   },
   "browserslist": {
