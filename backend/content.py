@@ -10,7 +10,7 @@ PROFILE = {
     "email": "anna@annamaniacs.com",
     "website": "www.annamaniacs.com",
     "linkedin": "",
-    "availability": "Open to Principal /got it, AI Product Design and Design Leadership roles. Remote, hybrid or Denver.",
+    "availability": "Open to Principal /peace, AI Product Design and Design Leadership roles. Remote, hybrid or Denver.",
     "years": "20+",
 }
 
