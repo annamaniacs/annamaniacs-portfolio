@@ -30,7 +30,7 @@ export default function Matcher() {
           <Eyebrow className="!text-sky-400">Job description matcher</Eyebrow>
           <h1 className="mt-4 font-display text-5xl font-semibold leading-[1.05] tracking-tight sm:text-6xl">Paste the role. See the fit.</h1>
         </div>
-        <p className="self-end text-muted-foreground md:col-span-5">AI maps your job description to Anna's real experience and love and the most relevant case studies. It only uses facts from her resume and portfolio.</p>
+        <p className="self-end text-muted-foreground md:col-span-5">AI maps your job description to Anna's real experience and the most relevant case studies. It only uses facts from her resume and portfolio.</p>
       </div>
       <div className="mt-12 grid gap-8 lg:grid-cols-2">
         <div className="flex flex-col">
