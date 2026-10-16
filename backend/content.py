@@ -6,11 +6,11 @@ PROFILE = {
     "tagline": "Complex enterprise & AI-powered products",
     "headline": "I make complex, high-stakes products clear, including the AI inside them.",
     "subline": "Principal-level product designer for enterprise, fintech and AI-powered platforms. I turn ambiguous workflows into products people trust, and I use AI daily to explore, prototype and validate faster, with human judgment in charge.",
-    "location": "Denver, Colorado, US",
+    "location": "Denver, CO",
     "email": "anna@annamaniacs.com",
     "website": "www.annamaniacs.com",
     "linkedin": "",
-    "availability": "Open to Staff / Principal, AI Product Design and Design Leadership roles. Remote, hybrid or Denver.",
+    "availability": "Open to Principal / Staff, AI Product Design and Design Leadership roles. Remote, hybrid or Denver.",
     "years": "20+",
 }
 
