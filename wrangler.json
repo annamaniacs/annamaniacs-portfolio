@@ -1,6 +1,6 @@
 {
   "name": "my-python-app",
-  "main": "main.py",
+  "main": "server.py",
   "compatibility_date": "2026-10-16",
   "compatibility_flags": ["python_workers"],
   "assets": {
