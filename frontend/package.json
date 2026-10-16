@@ -1,4 +1,7 @@
 {
+  "config": {
+  "legacy-peer-deps": true
+},
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
